@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Typora+Hexo插入图片网页端无法显示</title>
+      <link href="/2024/04/14/typora-hexo-cha-ru-tu-pian-wang-ye-duan-wu-fa-xian-shi/"/>
+      <url>/2024/04/14/typora-hexo-cha-ru-tu-pian-wang-ye-duan-wu-fa-xian-shi/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Typora-Hexo插入图片网页端无法显示"><a href="#Typora-Hexo插入图片网页端无法显示" class="headerlink" title="Typora+Hexo插入图片网页端无法显示"></a>Typora+Hexo插入图片网页端无法显示</h1><h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>​使用Typora编写的文章，使用Hexo部署时图片链接类似<code>update link as:--&gt;/.io//image-20240329223636385.png</code>，而插入的图片在Hexo生成的网页端也无法正常显示，只是显示一个类似如下的图片标题</p><p><img src="/2024/04/14/typora-hexo-cha-ru-tu-pian-wang-ye-duan-wu-fa-xian-shi/image-20240414160536486.png" alt="图片无法显示"></p><h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>这是Hexo软件部署的一个bug，域名是xxx.io的情况下，图片路径会从原本/xxx.jpg变成 /.io/xxx.jpg 。文件<code>博客目录\node_modules\hexo-asset-image\index.js</code>中第26行是<code>link = link.substring(beginPos, endPos) + '/' + appendLink</code>，当endPos小于beginPos的时候，link会往回取字符串.io 导致img url 多了/.io ，从而获取不到正确的图片路径</p><p><img src="/2024/04/14/typora-hexo-cha-ru-tu-pian-wang-ye-duan-wu-fa-xian-shi/image-20240414161041619.png" alt="生成错误路径"></p><p>将文件<code>博客目录\node_modules\hexo-asset-image\index.js</code>中第24行的<code>var endPos = link.lastIndexOf('.')</code>修改为<code>var endPos = link.length-1</code>即可解决，生成正确的图片路径，并且可以在网页端正常显示</p><p><img src="/2024/04/14/typora-hexo-cha-ru-tu-pian-wang-ye-duan-wu-fa-xian-shi/image-20240414161906791.png" alt="生成正确路径"></p><p><img src="/2024/04/14/typora-hexo-cha-ru-tu-pian-wang-ye-duan-wu-fa-xian-shi/image-20240414161627247.png" alt="正常显示图片"></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Issue </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Github学习笔记--从零开始学习</title>
       <link href="/2024/04/14/github-xue-xi-bi-ji-cong-ling-kai-shi-xue-xi/"/>
       <url>/2024/04/14/github-xue-xi-bi-ji-cong-ling-kai-shi-xue-xi/</url>
