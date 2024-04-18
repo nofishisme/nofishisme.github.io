@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>Leetcode_1110</title>
+      <link href="/2024/04/18/leetcode-1110/"/>
+      <url>/2024/04/18/leetcode-1110/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Leetcode-1110题解"><a href="#Leetcode-1110题解" class="headerlink" title="Leetcode_1110题解"></a>Leetcode_1110题解</h1><h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>​<a href="https://leetcode.cn/problems/delete-nodes-and-return-forest/">删点成林</a></p><p>​给出二叉树的根节点 <code>root</code>，树上每个节点都有一个不同的值。</p><p>​如果节点值在 <code>to_delete</code> 中出现，我们就把该节点从树上删去，最后得到一个森林（一些不相交的树构成的集合）。</p><p>​返回森林中的每棵树。你可以按任意顺序组织答案。</p><p><img src="/2024/04/18/leetcode-1110/image-20240418141225748.png" alt="image-20240418141225748"></p><h3 id="题解分析"><a href="#题解分析" class="headerlink" title="题解分析"></a>题解分析</h3><p>​可以使用递归来处理树，考虑到需要不遗漏的处理树中的每一个节点，需要使用后序递归遍历，从下往上，从左往右进行遍历，这样即使分离的原来的二叉树，也不会造成节点遗漏。</p><p>​关键点在于要在什么时候将指针断开，分以下三步考虑。</p><p>​(1).递归处理左子树上的节点</p><p>​(2).递归处理右子树上的节点</p><p>​(3).处理根节点。这是最重要的一步。若根节点当前的节点值等于待删除的节点值，那么二叉树就会在此被分离，根节点左子树或者右子树不空时，分离后就会变成单独的树，此时就将分离的树的根节点存入森林数组中。</p><p>​递归处理树的过程是在一个辅助函数中完成的，为了保证原二叉树的根节点不遗漏，可以创建一个辅助节点当做虚拟根节点。</p><h3 id="题解代码"><a href="#题解代码" class="headerlink" title="题解代码"></a>题解代码</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">class Solution {</span><br><span class="line">public:</span><br><span class="line">    vector&lt;TreeNode*&gt; delNodes(TreeNode* root, vector&lt;int&gt;&amp; to_delete) {</span><br><span class="line">        vector&lt;TreeNode*&gt; result;</span><br><span class="line">        TreeNode* tmp_root = new TreeNode(to_delete[0], root, nullptr);</span><br><span class="line">        postorder(result, tmp_root, to_delete);</span><br><span class="line">        return result;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    bool postorder(vector&lt;TreeNode*&gt;&amp; result, TreeNode* root, vector&lt;int&gt;&amp; to_delete) {</span><br><span class="line">        if(!root){</span><br><span class="line">            return false;</span><br><span class="line">        }</span><br><span class="line">        bool ret1 = postorder(result, root-&gt;left, to_delete);</span><br><span class="line">        if(ret1){</span><br><span class="line">            root-&gt;left = nullptr;</span><br><span class="line">        }</span><br><span class="line">        bool ret2 = postorder(result, root-&gt;right, to_delete);</span><br><span class="line">        if(ret2){</span><br><span class="line">            root-&gt;right = nullptr;</span><br><span class="line">        }</span><br><span class="line">        for(int i = 0; i &lt; to_delete.size(); ++i){</span><br><span class="line">            if(root-&gt;val == to_delete[i]){</span><br><span class="line">                if(root-&gt;left) result.push_back(root-&gt;left);</span><br><span class="line">                if(root-&gt;right) result.push_back(root-&gt;right);</span><br><span class="line">                delete root;</span><br><span class="line">                root = nullptr;</span><br><span class="line">                return true;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        return false;</span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Leetcode </tag>
+            
+            <tag> 二叉树 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Leetcode_101题解</title>
       <link href="/2024/04/18/leetcode-101-ti-jie/"/>
       <url>/2024/04/18/leetcode-101-ti-jie/</url>
