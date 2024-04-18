@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>Leetcode_101题解</title>
+      <link href="/2024/04/18/leetcode-101-ti-jie/"/>
+      <url>/2024/04/18/leetcode-101-ti-jie/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Leetcode-101题解"><a href="#Leetcode-101题解" class="headerlink" title="Leetcode_101题解"></a>Leetcode_101题解</h1><h3 id="1-题目描述"><a href="#1-题目描述" class="headerlink" title="1.题目描述"></a>1.题目描述</h3><p>​<a href="https://leetcode.cn/problems/symmetric-tree/">对称二叉树</a></p><p>​给你一个二叉树的根节点 <code>root</code> ， 检查它是否轴对称。</p><h3 id="2-题解思路"><a href="#2-题解思路" class="headerlink" title="2.题解思路"></a>2.题解思路</h3><p>​判断一个二叉树是否对称，等价于判断左右子树是否对称。判断两个子树相等或者对称可以分解为以下几步：</p><p>​(1).如果两个子树都为空指针，则它们相等或者对称。</p><p>​(2).如果两个子树只有一个为空指针，则他们不相等或者不对称</p><p>​(3).如果两个子树根节点值不相同，那么他们不相等或者对称</p><p>​(4).两个子树根节点值相同，进行递归处理</p><h3 id="3-题解代码"><a href="#3-题解代码" class="headerlink" title="3.题解代码"></a>3.题解代码</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class Solution {</span><br><span class="line">public:</span><br><span class="line">    bool isSymmetric(TreeNode* root) {</span><br><span class="line">        return bothInOrder(root-&gt;left, root-&gt;right);</span><br><span class="line">    }</span><br><span class="line">    bool bothInOrder(TreeNode* lt, TreeNode* rt){</span><br><span class="line">        if(!lt &amp;&amp; !rt) {</span><br><span class="line">            return true;</span><br><span class="line">        }</span><br><span class="line">        else if(!lt || !rt) {</span><br><span class="line">            return false;</span><br><span class="line">        }</span><br><span class="line">        return lt-&gt;val == rt-&gt;val ? (bothInOrder(lt-&gt;left, rt-&gt;right) ? </span><br><span class="line">               bothInOrder(lt-&gt;right, rt-&gt;left) : false) : false;</span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Leetcode </tag>
+            
+            <tag> 二叉树 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>C语言易错题集合（二）</title>
       <link href="/2024/04/16/di-er-ci-ce-yan-cuo-ti-ji-he/"/>
       <url>/2024/04/16/di-er-ci-ce-yan-cuo-ti-ji-he/</url>
@@ -61,13 +82,19 @@
     
     
     <entry>
-      <title>Hello World</title>
-      <link href="/2024/04/07/hello-world/"/>
-      <url>/2024/04/07/hello-world/</url>
+      <title>C语言易错题集合（一）</title>
+      <link href="/2024/04/07/di-yi-ci-ce-yan-cuo-ti-ji-he/"/>
+      <url>/2024/04/07/di-yi-ci-ce-yan-cuo-ti-ji-he/</url>
       
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+        <content type="html"><![CDATA[<h1 id="第一次测验错题集合"><a href="#第一次测验错题集合" class="headerlink" title="第一次测验错题集合"></a>第一次测验错题集合</h1><h3 id="1-变量的声明和定义区别"><a href="#1-变量的声明和定义区别" class="headerlink" title="1.变量的声明和定义区别"></a>1.变量的声明和定义区别</h3><p>​变量的声明和变量的定义</p><p>​声明是告诉编译器变量的类型，名字等信息</p><p>​定义是声明加上运行时给变量分配内存空间</p><p>​定义是包含声明的，但不是所有的声明都是定义</p><p>​也就是说有一些声明，他只是编译作用，而不会在运行时分配内存</p><h3 id="2-C语言基本数据类型"><a href="#2-C语言基本数据类型" class="headerlink" title="2.C语言基本数据类型"></a>2.C语言基本数据类型</h3><p>​除了int自己，所有的整型实际上都要包含int，但可以省略</p><p>​short int(integer)</p><p>​long int</p><p>​long long int</p><p>​unsigned int</p><p>​由于unsigned int可以省略为unsigned</p><p>​所以也可以将它视为基本数据类型</p><h3 id="3-goto使用"><a href="#3-goto使用" class="headerlink" title="3.goto使用"></a>3.goto使用</h3><p>​goto在现代C/C++中，不要随意去使用</p><p>​如果要用，一般是以下两个场景：</p><p>​1.跳出外层循环</p><p>​2.错误处理</p><h3 id="4-运算符优先级"><a href="#4-运算符优先级" class="headerlink" title="4.运算符优先级"></a>4.运算符优先级</h3><p>​一元运算符的优先级总是比二元运算符优先级高</p><p>​二元运算符中，算术运算符优先级最高</p>]]></content>
       
       
+      
+        <tags>
+            
+            <tag> 易错集合 </tag>
+            
+        </tags>
       
     </entry>
     

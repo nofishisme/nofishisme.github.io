@@ -1,3 +1,5 @@
+https://nofishisme.github.io/2024/04/18/leetcode-101-ti-jie/
+https://nofishisme.github.io/2024/04/07/di-yi-ci-ce-yan-cuo-ti-ji-he/
 https://nofishisme.github.io/link/index.html
 https://nofishisme.github.io/tags/index-1.html
 https://nofishisme.github.io/categories/index-1.html
@@ -10,8 +12,9 @@ https://nofishisme.github.io/friends/index.html
 https://nofishisme.github.io/about/index.html
 https://nofishisme.github.io/tags/index.html
 https://nofishisme.github.io/categories/index.html
-https://nofishisme.github.io/2024/04/07/hello-world/
 https://nofishisme.github.io/
 https://nofishisme.github.io/tags/Github/
+https://nofishisme.github.io/tags/Leetcode/
+https://nofishisme.github.io/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/
 https://nofishisme.github.io/tags/Issue/
 https://nofishisme.github.io/tags/%E6%98%93%E9%94%99%E9%9B%86%E5%90%88/
