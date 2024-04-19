@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>渔樵@~</title>
+  <title>渔樵のBlog</title>
   
-  <subtitle>渔樵のBlog</subtitle>
+  <subtitle>桥下的鱼，看着桥上的人......</subtitle>
   <link href="https://nofishisme.github.io/atom.xml" rel="self"/>
   
   <link href="https://nofishisme.github.io/"/>
