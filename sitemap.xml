@@ -183,20 +183,6 @@
 
   
   <url>
-    <loc>https://nofishisme.github.io/categories/%E7%AE%97%E6%B3%95/</loc>
-    <lastmod>2024-04-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://nofishisme.github.io/categories/Github/</loc>
-    <lastmod>2024-04-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://nofishisme.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2024-04-19</lastmod>
     <changefreq>weekly</changefreq>
@@ -204,7 +190,7 @@
   </url>
   
   <url>
-    <loc>https://nofishisme.github.io/categories/bug%E4%BF%AE%E5%A4%8D/</loc>
+    <loc>https://nofishisme.github.io/categories/%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2024-04-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
