@@ -6,7 +6,7 @@
   <link href="https://nofishisme.github.io/atom.xml" rel="self"/>
   
   <link href="https://nofishisme.github.io/"/>
-  <updated>2024-04-19T06:55:37.791Z</updated>
+  <updated>2024-04-20T03:00:19.297Z</updated>
   <id>https://nofishisme.github.io/</id>
   
   <author>
@@ -15,6 +15,58 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ubuntu网络消失解决办法</title>
+    <link href="https://nofishisme.github.io/2024/04/20/ubuntu-wang-luo-xiao-shi-jie-jue-ban-fa/"/>
+    <id>https://nofishisme.github.io/2024/04/20/ubuntu-wang-luo-xiao-shi-jie-jue-ban-fa/</id>
+    <published>2024-04-20T02:46:02.000Z</published>
+    <updated>2024-04-20T03:00:19.297Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;ubuntu网络消失解决办法&quot;&gt;&lt;a href=&quot;#ubuntu网络消失解决办法&quot; class=&quot;headerlink&quot; title=&quot;ubuntu网络消失解决办法&quot;&gt;&lt;/a&gt;ubuntu网络消失解决办法&lt;/h1&gt;&lt;h3 id=&quot;问题描述&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="bug修复" scheme="https://nofishisme.github.io/categories/bug%E4%BF%AE%E5%A4%8D/"/>
+    
+    
+    <category term="Issue" scheme="https://nofishisme.github.io/tags/Issue/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Leetcode_99题解</title>
+    <link href="https://nofishisme.github.io/2024/04/20/leetcode-99-ti-jie/"/>
+    <id>https://nofishisme.github.io/2024/04/20/leetcode-99-ti-jie/</id>
+    <published>2024-04-20T00:36:55.000Z</published>
+    <updated>2024-04-20T01:12:58.040Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;Leetcode-99题解&quot;&gt;&lt;a href=&quot;#Leetcode-99题解&quot; class=&quot;headerlink&quot; title=&quot;Leetcode_99题解&quot;&gt;&lt;/a&gt;Leetcode_99题解&lt;/h1&gt;&lt;h3 id=&quot;1-题目描述&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://nofishisme.github.io/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+    <category term="Leetcode" scheme="https://nofishisme.github.io/tags/Leetcode/"/>
+    
+    <category term="二叉树" scheme="https://nofishisme.github.io/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/"/>
+    
+  </entry>
   
   <entry>
     <title>Leetcode_1110题解</title>
