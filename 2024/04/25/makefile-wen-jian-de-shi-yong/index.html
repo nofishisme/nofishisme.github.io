@@ -1,0 +1,363 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Makefile文件的使用 | 渔樵のBlog</title><meta name="author" content="渔樵@~"><meta name="copyright" content="渔樵@~"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Makefile文件的使用1 问题说明​	大型工程如果修改任一个源文件就需要编译整个工程，会非常耗时。需要有一种功能，只需要将更新过的和新增的源文件进行重新编译，而那些没修改过的源文件，则不会重新编译的。这种编译工程的策略就是——**”增量编译”**！ ​	需要实现两种功能： ​	(1)制定一套规则，实现源文件自动化的编译链接 ​	(2)实现增量编译 ​	makefile就可以实现这些功能。 2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Makefile文件的使用">
+<meta property="og:url" content="https://nofishisme.github.io/2024/04/25/makefile-wen-jian-de-shi-yong/index.html">
+<meta property="og:site_name" content="渔樵のBlog">
+<meta property="og:description" content="Makefile文件的使用1 问题说明​	大型工程如果修改任一个源文件就需要编译整个工程，会非常耗时。需要有一种功能，只需要将更新过的和新增的源文件进行重新编译，而那些没修改过的源文件，则不会重新编译的。这种编译工程的策略就是——**”增量编译”**！ ​	需要实现两种功能： ​	(1)制定一套规则，实现源文件自动化的编译链接 ​	(2)实现增量编译 ​	makefile就可以实现这些功能。 2">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://nofishisme.github.io/img/cover/117950632_p9_master1200.jpg">
+<meta property="article:published_time" content="2024-04-25T01:58:04.000Z">
+<meta property="article:modified_time" content="2024-04-25T08:14:03.731Z">
+<meta property="article:author" content="渔樵@~">
+<meta property="article:tag" content="工具">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nofishisme.github.io/img/cover/117950632_p9_master1200.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://nofishisme.github.io/2024/04/25/makefile-wen-jian-de-shi-yong/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Makefile文件的使用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-25 16:14:03'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="渔樵のBlog" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/20210607212402_82a8d.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/117950632_p9_master1200.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="渔樵のBlog"><span class="site-name">渔樵のBlog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Makefile文件的使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-25T01:58:04.000Z" title="发表于 2024-04-25 09:58:04">2024-04-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-25T08:14:03.731Z" title="更新于 2024-04-25 16:14:03">2024-04-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Makefile文件的使用"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Makefile文件的使用"><a href="#Makefile文件的使用" class="headerlink" title="Makefile文件的使用"></a>Makefile文件的使用</h1><h3 id="1-问题说明"><a href="#1-问题说明" class="headerlink" title="1 问题说明"></a>1 问题说明</h3><p>​	大型工程如果修改任一个源文件就需要编译整个工程，会非常耗时。需要有一种功能，只需要将更新过的和新增的源文件进行重新编译，而那些没修改过的源文件，则不会重新编译的。这种编译工程的策略就是——**”增量编译”**！</p>
+<p>​	需要实现两种功能：</p>
+<p>​	(1)制定一套规则，实现源文件自动化的编译链接</p>
+<p>​	(2)实现增量编译</p>
+<p>​	makefile就可以实现这些功能。</p>
+<h3 id="2-Makefile本质"><a href="#2-Makefile本质" class="headerlink" title="2 Makefile本质"></a>2 Makefile本质</h3><p>​	Makefile本质上是一脚本个文件，这个文件中存放了编译和构建程序的脚本指令，定义了整个工程构建可执行程序的规则。</p>
+<p>​	使用Makefile脚本文件制定构建程序的规则，然后使用<code>make</code>指令来解释Makefile文件，从而实现自动化的程序构建和增量编译。</p>
+<h3 id="3-Makefile组成"><a href="#3-Makefile组成" class="headerlink" title="3 Makefile组成"></a>3 Makefile组成</h3><p>​	新建的Makefile文件名必须是Makefile或者makefile</p>
+<h4 id="3-1-Makefile脚本基本单元"><a href="#3-1-Makefile脚本基本单元" class="headerlink" title="3.1 Makefile脚本基本单元"></a>3.1 Makefile脚本基本单元</h4><p>​	Makefile文件脚本指令的基本组成单元是<strong>规则</strong>。</p>
+<p>​	规则的组成：<strong>目标（Target）、依赖（Prerequisites）、命令（Commands）</strong></p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">target: prerequisites</span></span><br><span class="line">    <span class="comment">#command行的开头必须是一个制表符，若换成空格符，Makefile脚本会运行报错</span></span><br><span class="line">    commands</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	目标（Target）：目标通常是文件名，代表了要生成或更新的文件。一条规则中，只有一个目标，不能有多个目标。</p>
+<p>​	依赖（Prerequisites）：代表生成目标时所依赖的文件，可以是一个，也可以是很多个。</p>
+<p>​	命令（Commands）：代表生成目标时所执行的指令，可以是一条，也可以是多条。每个命令必须以一个制表符（Tab）开始，这是 Makefile 语法的强制要求！！！</p>
+<p><img src="/2024/04/25/makefile-wen-jian-de-shi-yong/202403061651719.png" alt="需要注意制表符-图"></p>
+<h4 id="3-2-Makefile脚本基本工作原理"><a href="#3-2-Makefile脚本基本工作原理" class="headerlink" title="3.2 Makefile脚本基本工作原理"></a>3.2 Makefile脚本基本工作原理</h4><p>​	执行<code>make</code>命令，Makefile工作流程如下：</p>
+<p>​	<strong>读取 Makefile文件：</strong>当运行 <code>make</code> 命令时，它会自动读取当前目录下的 Makefile/makefile 文件。</p>
+<p>​	<strong>重复以下过程：</strong></p>
+<p>​	(1)<strong>确定目标：</strong>Makefile脚本代码，在默认情况下第一个目标就是构建的最终目标。</p>
+<p>​	(2)<strong>检查目标是否存在或过时：</strong></p>
+<p>​	如果目标已经存在，则检查所有依赖。如果任一依赖不存在，或者任何依赖的最后修改时间比目标的最后修改时间更晚，说明目标已经过时！</p>
+<p>​	如果目标不存在或者目标过时，则认定需要生成目标。</p>
+<p>​	(3)<strong>生成目标：</strong></p>
+<p>​	如果仅是依赖发生了更新(最后修改时间比目标晚)，那么就立刻执行该规则下的命令，生成目标。</p>
+<p>​	<strong>如果依赖不存在，那就递归的检查依赖，生成依赖，直到生成目标所需要的依赖都已存在且最新，那么就执行该规则下的命令，生成目标。</strong></p>
+<p>重复以上过程，直到：</p>
+<p>​	(1)<strong>正常结束：</strong>第一个目标正确生成完毕，Makefile执行完毕。<strong>（Makefile默认不会构建和第一个目标无关的其它目标，即便有）</strong></p>
+<p>​	(2)<strong>报错退出：</strong>如果执行任何命令过程中出现错误或者依赖的某个文件递归查找也无法生成或找到，Makefile会退出并打印错误信息。</p>
+<h3 id="4-Makefile高级"><a href="#4-Makefile高级" class="headerlink" title="4 Makefile高级"></a>4 Makefile高级</h3><h4 id="4-1-伪目标"><a href="#4-1-伪目标" class="headerlink" title="4.1 伪目标"></a>4.1 伪目标</h4><p>​	如果一个目标是：没有依赖，不给它添加任何依赖。但存在至少一条命令</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">FakeTarget:</span></span><br><span class="line">    echo <span class="string">"hello world!"</span>     <span class="comment">#向屏幕输出hello world!</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	上面的代码输出是<code>hello world!</code>	</p>
+<p>​	在Makefile脚本当中，像<code>FakeTarget</code>这样的，不存在且一定无法生成的目标，被称之为**”伪目标”**。伪目标的意义就在于：确保规则中的所有命令都必然要执行。	</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">FakeTarget:</span></span><br><span class="line">    echo <span class="string">"first fake"</span></span><br><span class="line"><span class="section">FakeTarget2:</span></span><br><span class="line">    echo <span class="string">"second fake"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	上面代码只输出<code>first fake</code>，Makefile默认不会构建和第一个目标无关的其它目标，即便有这个目标。但我们在使用<code>make</code>指令时，可以通过参数<code>make 目标名</code>来更改构建的目标。比如执行<code>make FakeTarget2</code>，效果就是输出<code>second fake</code>。</p>
+<p>​	伪目标在实际工作中非常有用，常用来实现<strong>clean</strong>和<strong>rebuild</strong>两个功能</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main: main.o add.o</span></span><br><span class="line"> gcc main.o add.o -o main</span><br><span class="line"><span class="section">main.o: main.c compute.h</span></span><br><span class="line"> gcc -c main.c -Wall -g</span><br><span class="line"><span class="section">add.o: add.c compute.h</span></span><br><span class="line"> gcc -c add.c -Wall -g</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -f main main.o add.o <span class="comment">#删除所有生成的目标文件以及可执行程序，并且不给提示。-f是必须的</span></span><br><span class="line"><span class="section">rebuild: clean main     #clean和main要写在依赖的未知，而不是命令的位置！</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	在定义一个Makefile时，添加上这两个伪目标，以实现清理和重新生成的功能。</p>
+<p>​	<em><strong>建议用”.PHONY”标记所有的伪目标</strong></em></p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#.....</span></span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: clean rebuild           #PHONY有假的意思, 用它标记伪目标是一个好的编程实践，注意<span class="keyword">.PHONY</span>后面有一个冒号</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -f main main.o add.o     <span class="comment">#删除所有生成的目标文件以及可执行程序，并且不给提示。-f是必须的</span></span><br><span class="line"><span class="section">rebuild: clean main             #clean和main要写在依赖的未知，而不是命令的位置！</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这么做有两个好处：</p>
+<p>​	(1).增强代码可读取，立刻就知道某个目标是一个伪目标。</p>
+<p>​	(2).即便当前目录下存在名为clean或rebuild的文件，”make clean”指令也能正常执行，而不会因文件clean/rebuild作为目标存在而不执行对应指令！</p>
+<p>​	<strong>以下两点比较通用</strong></p>
+<p>​	(1)将第一行当成终极目标</p>
+<p>​	(2)要执行特定行的目标，使用<code>make [目标名]</code></p>
+<h4 id="4-2-变量"><a href="#4-2-变量" class="headerlink" title="4.2 变量"></a>4.2 变量</h4><p>​	Makefile脚本中的变量，非常类似于C/C++中的宏定义：</p>
+<p>​	(1).Makefile变量，在本质上就是一个文本字符串，在执行脚本代码的时候会原模原样地展开在所使用的地方(类似于宏的文本替换)。</p>
+<p>​	(2).我们可以随时修改 Makefile 中定义的变量的内容。</p>
+<p>​	Makefile变量语法：</p>
+<p>​	(1).Makefile变量的名称可以包含字母、数字和下划线，而且是大小写敏感的。</p>
+<p>​	(2).建议变量名全部大写，下划线分割单词。</p>
+<p>​	(3).变量名全部大写，下划线分割单词。</p>
+<p>​	(4).<strong>Makefile变量</strong>在使用的时候：</p>
+<p>​	需要给在变量名前加上$符号</p>
+<p>​	如果变量名不是单字符，就必须用()或大括号 {} 把变量名括起来。如果变量名是单字符，则允许不用括号。</p>
+<h5 id="4-2-1-自定义变量"><a href="#4-2-1-自定义变量" class="headerlink" title="4.2.1 自定义变量"></a>4.2.1 自定义变量</h5><p>​	自定义变量就是程序员自己编写代码定义的变量。前面已经实现的脚本可以利用自定义变量优化。</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main: main.o add.o</span></span><br><span class="line"> gcc main.o add.o -o main</span><br><span class="line"><span class="section">main.o: main.c compute.h</span></span><br><span class="line"> gcc -c main.c -Wall -g</span><br><span class="line"><span class="section">add.o: add.c compute.h</span></span><br><span class="line"> gcc -c add.c -Wall -g</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line"> rm -f main main.o add.o</span><br><span class="line"><span class="section">rebuild: clean main</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	优化</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">OUT := main     <span class="comment">#目标文件</span></span><br><span class="line">OBJS := main.o add.o       <span class="comment">#生成目标文件所需要的依赖   </span></span><br><span class="line">COM_OP := -Wall -g        <span class="comment">#编译选项</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(OUT)</span>:<span class="variable">$(OBJS)</span></span><br><span class="line"> gcc main.o add.o -o main</span><br><span class="line"><span class="section">main.o: main.c compute.h</span></span><br><span class="line"> gcc -c main.c <span class="variable">$(COM_OP)</span></span><br><span class="line"><span class="section">add.o: add.c compute.h</span></span><br><span class="line"> gcc -c add.c <span class="variable">$(COM_OP)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line"> rm -f <span class="variable">$(OUT)</span> <span class="variable">$(OBJS)</span> </span><br><span class="line"><span class="section">rebuild: clean <span class="variable">$(OUT)</span></span></span><br></pre></td></tr></tbody></table></figure>
+
+<h5 id="4-2-2-自动变量"><a href="#4-2-2-自动变量" class="headerlink" title="4.2.2 自动变量"></a>4.2.2 自动变量</h5><p>​	自动变量是指那些在<strong>规则</strong>执行时<strong>自动设置的变量</strong>，它们通常用于引用规则的目标和依赖项。下面是一些常用的自动变量，<strong>变量名</strong>及其描述如下**(注意是变量名)**：</p>
+<p>​	(1).<code>@</code>：表示此规则的目标文件名。</p>
+<p>​	(2).<code>&lt;</code>：表示此规则的第一个依赖文件名。</p>
+<p>​	(3).<code>^</code>：表示此所有的依赖文件列表，这些依赖项之间以空格分隔。</p>
+<p><strong>注意：这些都只是变量名，要使用这些变量的话，需要在变量名前加字符$（单字符名不用加括号）。</strong></p>
+<p>​	继续修改优化前面的代码</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">OUT := main     <span class="comment">#目标文件</span></span><br><span class="line">OBJS := main.o add.o       <span class="comment">#生成目标文件所需要的依赖</span></span><br><span class="line">COM_OP := -Wall -g        <span class="comment">#编译选项</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(OUT)</span>:<span class="variable">$(OBJS)</span></span><br><span class="line">    gcc <span class="variable">$^</span> -o <span class="variable">$@</span></span><br><span class="line"><span class="section">main.o: main.c compute.h</span></span><br><span class="line">    gcc -c <span class="variable">$&lt;</span> <span class="variable">$(COM_OP)</span></span><br><span class="line"><span class="section">add.o: add.c compute.h</span></span><br><span class="line">    gcc -c <span class="variable">$&lt;</span> <span class="variable">$(COM_OP)</span>                            </span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: clean rebuild</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -f <span class="variable">$(OUT)</span> <span class="variable">$(OBJS)</span>         </span><br><span class="line"><span class="section">rebuild: clean main</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h5 id="4-2-3-预定义变量"><a href="#4-2-3-预定义变量" class="headerlink" title="4.2.3 预定义变量"></a>4.2.3 预定义变量</h5><p>​	这些都是变量名，要使用这些变量的话，需要在变量名前加字符$以及括号。</p>
+<table>
+<thead>
+<tr>
+<th align="center">变量名</th>
+<th align="center">功能</th>
+<th align="center">默认含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">AR</td>
+<td align="center">打包静态库文件</td>
+<td align="center">ar</td>
+</tr>
+<tr>
+<td align="center">AS</td>
+<td align="center">汇编程序</td>
+<td align="center">as</td>
+</tr>
+<tr>
+<td align="center">CC</td>
+<td align="center">C编译器</td>
+<td align="center">cc</td>
+</tr>
+<tr>
+<td align="center">CPP</td>
+<td align="center">C预编译器</td>
+<td align="center">$(CC) -E</td>
+</tr>
+<tr>
+<td align="center">CXX</td>
+<td align="center">C++编译器</td>
+<td align="center">g++</td>
+</tr>
+<tr>
+<td align="center">RM</td>
+<td align="center">删除</td>
+<td align="center">rm –f</td>
+</tr>
+<tr>
+<td align="center">ARFLAGS</td>
+<td align="center">库选项</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">ASFLAGS</td>
+<td align="center">汇编选项</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">CFLAGS</td>
+<td align="center">C编译器选项</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">CPPFLAGS</td>
+<td align="center">C预编译器选项</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="center">CXXFLAGS</td>
+<td align="center">C++编译器选项</td>
+<td align="center">无</td>
+</tr>
+</tbody></table>
+<p>​	这些都是变量名，要使用这些变量的话，需要在变量名前加字符$以及括号。</p>
+<h4 id="4-3-模式规则"><a href="#4-3-模式规则" class="headerlink" title="4.3 模式规则"></a>4.3 模式规则</h4><p>​	模式规则：用于定义如何从一种类型的文件生成另一种类型的文件，它直接指定了文件之间的转换规则。模式规则下一般使用百分号（%）来表示文件名中的通配符部分。</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">%.target : %.source</span><br><span class="line">    commands</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	解释如下：</p>
+<p>​	<code>%.target</code>表示可以匹配任意目标文件。比如<code>%.o</code>表示任意.o文件作为目标</p>
+<p>​	<code>%.source</code>表示可以匹配任意依赖文件。比如<code>%.c</code>表示任意.c文件作为依赖</p>
+<p>使用这个模式规则后，Makefile可以自动推导如何从任何 .c 文件生成 .o 文件，这样就可以大幅度简化脚本代码。</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">OUT := main     <span class="comment">#目标文件</span></span><br><span class="line">OBJS := main.o add.o sub.o      <span class="comment">#生成目标文件所需要的依赖</span></span><br><span class="line">COM_OP := -Wall -g        <span class="comment">#编译选项</span></span><br><span class="line">CC := gcc        <span class="comment">#修改CC的默认值</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(OUT)</span>:<span class="variable">$(OBJS)</span></span><br><span class="line">    gcc <span class="variable">$^</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line">%.o : %.c compute.h</span><br><span class="line">    <span class="variable">$(CC)</span> -c <span class="variable">$&lt;</span> <span class="variable">$(COM_OP)</span></span><br><span class="line"><span class="comment">#以下内容可以被上面一个模式规则替代                                                                </span></span><br><span class="line"><span class="comment">#main.o: main.c compute.h</span></span><br><span class="line"><span class="comment">#   $(CC) -c $&lt; $(COM_OP)</span></span><br><span class="line"><span class="comment">#add.o: add.c compute.h</span></span><br><span class="line"><span class="comment">#   $(CC) -c $&lt; $(COM_OP)                            </span></span><br><span class="line"><span class="comment">#sub.o: sub.c compute.h</span></span><br><span class="line"><span class="comment">#   $(CC) -c $&lt; $(COM_OP)                            </span></span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: clean rebuild</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -f <span class="variable">$(OUT)</span> <span class="variable">$(OBJS)</span>         </span><br><span class="line"><span class="section">rebuild: clean main</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	注意：</p>
+<p>​	(1).模式规则不能作为Makefile的第一个规则</p>
+<p>​	(2).模式规则定义了如何将一种类型的文件（比如.c源文件）转换成另一种类型的文件（比如.o目标文件），这种转换是根据文件名模式来完成匹配的。</p>
+<p>​	(3).在模式规则中，通配符 <code>%</code> 的匹配是一致的，即目标和依赖列表中 <code>%</code> 所表示的内容是一致的。</p>
+<h4 id="4-4-内置函数"><a href="#4-4-内置函数" class="headerlink" title="4.4 内置函数"></a>4.4 内置函数</h4><p>​	Makefile脚本语言，支持函数调用，这种函数，我们称之为**Makefile的”内置函数”**。</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(&lt;function&gt; &lt;arguments&gt;)       <span class="comment">#调用时要用小括号把函数名和参数括起来</span></span><br><span class="line">${&lt;function&gt; &lt;arguments&gt;}       <span class="comment">#也可以用大括号括起来，两种方式都可以，使用时二选一</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	解释如下：</p>
+<p>​	(1) &lt;function&gt;为函数名。注意尖括号只是为了语法格式美观，它不是实际调用语法的一部分。</p>
+<p>​	(2) &lt;arguments&gt;为参数列表，允许出现一个或多个参数，参数之间以逗号分隔。注意尖括号只是为了语法格式美观，它不是实际调用语法的一部分。</p>
+<p>​	(3) 函数名和参数列表之间以”空格”分隔。</p>
+<p>​	(4) 参数允许有多个，多个参数之间用”,”分隔。</p>
+<p>​	<strong>通配符函数</strong>：返回所有符合<pattern>的文件名，文件名之间以空格分隔。</pattern></p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">wildcard</span> &lt;pattern&gt;)</span>   </span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	示例：查找当前目录下，所有以.c结尾的文件名，并将文件名以空格分隔，再赋值给变量SRCS。</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SRCS := <span class="variable">$(<span class="built_in">wildcard</span> *.c)</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	等价于：</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SRCS := main.c add.c sub.c</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	<strong>模式替换函数</strong>：查找&lt;text&gt;中符合模式&lt;pattern&gt;的单词(单词以空白字符分隔)，将其替换为&lt;replacement&gt;。</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">patsubst</span> &lt;pattern&gt;,&lt;replacement&gt;,&lt;text&gt;)</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	示例：</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OBJS := <span class="variable">$(<span class="built_in">patsubst</span> %.c, %.o, foo.c bar.c)</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	等价于：</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OBJS := foo.c.o bar.o</span><br></pre></td></tr></tbody></table></figure>
+
+<p>前面的Makefile脚本继续修改</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">OUT := main</span><br><span class="line">SRCS := <span class="variable">$(<span class="built_in">wildcard</span> *.c)</span> <span class="comment">#将当前目录下的所有.c文件的文件名以空格分割，然后赋值给SRCS变量</span></span><br><span class="line">OBJS := <span class="variable">$(<span class="built_in">patsubst</span> %.c,%.o,<span class="variable">$(SRCS)</span>)</span> <span class="comment">#获取当前目录下所有.c文件对应的.o文件，以空格分割             </span></span><br><span class="line">COM_OP := -Wall -g </span><br><span class="line"></span><br><span class="line"><span class="variable">$(OUT)</span>:<span class="variable">$(OBJS)</span></span><br><span class="line">    gcc <span class="variable">$^</span> -o <span class="variable">$@</span></span><br><span class="line">%.o : %.c compute.h</span><br><span class="line">    gcc -c <span class="variable">$&lt;</span> <span class="variable">$(COM_OP)</span></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: clean rebuild</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -f <span class="variable">$(OUT)</span> <span class="variable">$(OBJS)</span>         </span><br><span class="line"><span class="section">rebuild: clean main                                                     </span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	只要是在同一个目录中，存在一个主函数，多个.c文件或.h文件最终生成一个可执行程序，这个Makefile就非常好用且通用。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://nofishisme.github.io">渔樵@~</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://nofishisme.github.io/2024/04/25/makefile-wen-jian-de-shi-yong/">https://nofishisme.github.io/2024/04/25/makefile-wen-jian-de-shi-yong/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://nofishisme.github.io" target="_blank">渔樵のBlog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%B7%A5%E5%85%B7/">工具</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/117950632_p9_master1200.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/04/24/gcc-bian-yi-gong-ju-lian-de-shi-yong/" title="gcc编译工具链的使用"><img class="cover" src="/img/cover/117950632_p4_master1200.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">gcc编译工具链的使用</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/04/24/gcc-bian-yi-gong-ju-lian-de-shi-yong/" title="gcc编译工具链的使用"><img class="cover" src="/img/cover/117950632_p4_master1200.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-24</div><div class="title">gcc编译工具链的使用</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/20210607212402_82a8d.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">渔樵@~</div><div class="author-info__description">桥下的鱼，看着桥上的人......</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nofishisme/nofishisme.github.io"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/nofishisme" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:wuyunofish@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">渔樵的个人博客，记录学习之旅。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Makefile%E6%96%87%E4%BB%B6%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">Makefile文件的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%97%AE%E9%A2%98%E8%AF%B4%E6%98%8E"><span class="toc-text">1 问题说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Makefile%E6%9C%AC%E8%B4%A8"><span class="toc-text">2 Makefile本质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Makefile%E7%BB%84%E6%88%90"><span class="toc-text">3 Makefile组成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-Makefile%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E5%8D%95%E5%85%83"><span class="toc-text">3.1 Makefile脚本基本单元</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-Makefile%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">3.2 Makefile脚本基本工作原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Makefile%E9%AB%98%E7%BA%A7"><span class="toc-text">4 Makefile高级</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-%E4%BC%AA%E7%9B%AE%E6%A0%87"><span class="toc-text">4.1 伪目标</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-%E5%8F%98%E9%87%8F"><span class="toc-text">4.2 变量</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#4-2-1-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="toc-text">4.2.1 自定义变量</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-2-2-%E8%87%AA%E5%8A%A8%E5%8F%98%E9%87%8F"><span class="toc-text">4.2.2 自动变量</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-2-3-%E9%A2%84%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="toc-text">4.2.3 预定义变量</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-%E6%A8%A1%E5%BC%8F%E8%A7%84%E5%88%99"><span class="toc-text">4.3 模式规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0"><span class="toc-text">4.4 内置函数</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/04/25/makefile-wen-jian-de-shi-yong/" title="Makefile文件的使用"><img src="/img/cover/117950632_p9_master1200.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Makefile文件的使用"/></a><div class="content"><a class="title" href="/2024/04/25/makefile-wen-jian-de-shi-yong/" title="Makefile文件的使用">Makefile文件的使用</a><time datetime="2024-04-25T01:58:04.000Z" title="发表于 2024-04-25 09:58:04">2024-04-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/24/gcc-bian-yi-gong-ju-lian-de-shi-yong/" title="gcc编译工具链的使用"><img src="/img/cover/117950632_p4_master1200.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="gcc编译工具链的使用"/></a><div class="content"><a class="title" href="/2024/04/24/gcc-bian-yi-gong-ju-lian-de-shi-yong/" title="gcc编译工具链的使用">gcc编译工具链的使用</a><time datetime="2024-04-24T01:56:37.000Z" title="发表于 2024-04-24 09:56:37">2024-04-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/20/ubuntu-wang-luo-xiao-shi-jie-jue-ban-fa/" title="ubuntu网络消失解决办法"><img src="/img/cover/117950632_p6_master1200.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ubuntu网络消失解决办法"/></a><div class="content"><a class="title" href="/2024/04/20/ubuntu-wang-luo-xiao-shi-jie-jue-ban-fa/" title="ubuntu网络消失解决办法">ubuntu网络消失解决办法</a><time datetime="2024-04-20T02:46:02.000Z" title="发表于 2024-04-20 10:46:02">2024-04-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/20/leetcode-99-ti-jie/" title="Leetcode_99题解"><img src="/img/cover/117950632_p7_master1200.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Leetcode_99题解"/></a><div class="content"><a class="title" href="/2024/04/20/leetcode-99-ti-jie/" title="Leetcode_99题解">Leetcode_99题解</a><time datetime="2024-04-20T00:36:55.000Z" title="发表于 2024-04-20 08:36:55">2024-04-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/18/leetcode-1110/" title="Leetcode_1110题解"><img src="/img/cover/117950632_p8_master1200.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Leetcode_1110题解"/></a><div class="content"><a class="title" href="/2024/04/18/leetcode-1110/" title="Leetcode_1110题解">Leetcode_1110题解</a><time datetime="2024-04-18T06:09:00.000Z" title="发表于 2024-04-18 14:09:00">2024-04-18</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2024 By 渔樵@~</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">你好！欢迎来到我的<a href="https://nofishisme.github.io/">博客</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-show-text.min.js" data-mobile="false" data-text="渔樵@~" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
