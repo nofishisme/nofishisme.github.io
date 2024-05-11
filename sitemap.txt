@@ -1,3 +1,6 @@
+https://nofishisme.github.io/2024/05/11/ji-yu-wen-ben-de-ping-mu-curses-han-shu-ku/
+https://nofishisme.github.io/2024/05/11/shell-cheng-xu-she-ji/
+https://nofishisme.github.io/2024/05/11/xian-cheng/
 https://nofishisme.github.io/2024/05/09/ubuntu-zhong-zhao-bu-dao-tou-wen-jian-term-h-he-curses-h-de-jie-jue-fang-fa/
 https://nofishisme.github.io/2024/04/14/github-xue-xi-bi-ji-cong-ling-kai-shi-xue-xi/
 https://nofishisme.github.io/2024/04/25/makefile-wen-jian-de-shi-yong/
@@ -26,6 +29,7 @@ https://nofishisme.github.io/tags/Issue/
 https://nofishisme.github.io/tags/%E5%B7%A5%E5%85%B7/
 https://nofishisme.github.io/tags/bug%E4%BF%AE%E5%A4%8D/
 https://nofishisme.github.io/tags/%E6%98%93%E9%94%99%E9%9B%86%E5%90%88/
+https://nofishisme.github.io/tags/%E7%BC%96%E7%A8%8B/
 https://nofishisme.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/
 https://nofishisme.github.io/categories/%E7%AE%97%E6%B3%95/
 https://nofishisme.github.io/categories/bug/

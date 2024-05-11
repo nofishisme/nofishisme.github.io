@@ -1,0 +1,444 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Shell程序设计 | 渔樵のBlog</title><meta name="author" content="渔樵@~"><meta name="copyright" content="渔樵@~"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Shell程序设计1.什么是Shell编程​	shell是一个作为用户与Linux系统间接口的程序，它允许用户向操作系统输入需要执行的命令。Shell类似Windows的命令提示符，可以通过它执行命令，调用Linux工具，还可以自己编写程序，Shell执行的Shell程序通常被称为脚本，是在运行时解释执行的。可以逐行地执行指令，而且节省了重新编译的时间。然而，这也使得shell不适合用来完成时间紧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell程序设计">
+<meta property="og:url" content="https://nofishisme.github.io/2024/05/11/shell-cheng-xu-she-ji/index.html">
+<meta property="og:site_name" content="渔樵のBlog">
+<meta property="og:description" content="Shell程序设计1.什么是Shell编程​	shell是一个作为用户与Linux系统间接口的程序，它允许用户向操作系统输入需要执行的命令。Shell类似Windows的命令提示符，可以通过它执行命令，调用Linux工具，还可以自己编写程序，Shell执行的Shell程序通常被称为脚本，是在运行时解释执行的。可以逐行地执行指令，而且节省了重新编译的时间。然而，这也使得shell不适合用来完成时间紧">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://nofishisme.github.io/img/cover/117950632_p10_master1200.jpg">
+<meta property="article:published_time" content="2024-05-11T12:32:28.000Z">
+<meta property="article:modified_time" content="2024-05-11T12:33:36.769Z">
+<meta property="article:author" content="渔樵@~">
+<meta property="article:tag" content="编程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nofishisme.github.io/img/cover/117950632_p10_master1200.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://nofishisme.github.io/2024/05/11/shell-cheng-xu-she-ji/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Shell程序设计',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-05-11 20:33:36'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="渔樵のBlog" type="application/atom+xml">
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/20210607212402_82a8d.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/117950632_p10_master1200.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="渔樵のBlog"><span class="site-name">渔樵のBlog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Shell程序设计</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-05-11T12:32:28.000Z" title="发表于 2024-05-11 20:32:28">2024-05-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-05-11T12:33:36.769Z" title="更新于 2024-05-11 20:33:36">2024-05-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Shell程序设计"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Shell程序设计"><a href="#Shell程序设计" class="headerlink" title="Shell程序设计"></a>Shell程序设计</h1><h3 id="1-什么是Shell编程"><a href="#1-什么是Shell编程" class="headerlink" title="1.什么是Shell编程"></a>1.什么是Shell编程</h3><p>​	<strong>shell是一个作为用户与Linux系统间接口的程序，它允许用户向操作系统输入需要执行的命令。</strong>Shell类似Windows的命令提示符，可以通过它执行命令，调用Linux工具，还可以自己编写程序，Shell执行的Shell程序通常被称为脚本，是在运行时解释执行的。可以逐行地执行指令，而且节省了重新编译的时间。然而，这也使得shell不适合用来完成时间紧迫型和处理器忙碌型的任务。</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421135629085.png" alt="Linux层次"></p>
+<p>在乌班图中，使用以下命令可以查看bash版本：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/bash --version</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="2-管道和重定向"><a href="#2-管道和重定向" class="headerlink" title="2.管道和重定向"></a>2.管道和重定向</h3><h4 id="2-1重定向输出"><a href="#2-1重定向输出" class="headerlink" title="2.1重定向输出"></a>2.1重定向输出</h4><p>​	以下命令可以把<code>ls</code>命令的输出保存到文件<code>lsoutput.txt</code>中</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l &gt; lsoutput.txt</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	文件描述符0代表一个程序的标准输入，文件描述符1代表标准输出，而文件描述符2代表标准错误输出。</p>
+<p>​	使用<code>&gt;&gt;</code>操作符可以将输出<strong>附加</strong>到一个文件中</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps &gt;&gt; lsoutput.txt</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	这条命令会将ps命令的输出附加到指定文件的尾部。</p>
+<p>​	对不同的输出或者输入进行重定向，需要在需要重定向的文件描述符编号加载<code>&gt;</code>操作符前面。下面的命令将把标准输出和标准错误输出分别重定向到不同的文件中：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -HUP 1234 &gt;killout.txt 2&gt;killerr.txt</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	如果你想把两组输出都重定向到一个文件中，你可以用&gt;&amp;操作符来结合两个输出。如下所示：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -l 1234 &gt;killouterr.txt 2&gt;&amp;1</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	可以用Linux的通用“回收站”/dev/null来有效地丢弃所有的输出信息，如下所示：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -l 1234 &gt;/dev/null 2&gt;&amp;1</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="2-2重定向输入"><a href="#2-2重定向输入" class="headerlink" title="2.2重定向输入"></a>2.2重定向输入</h4><p>​	以重定向标准输入。例如：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">more &lt; killout.txt</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="2-3管道"><a href="#2-3管道" class="headerlink" title="2.3管道"></a>2.3管道</h4><p>​	可以用管道操作符<code>|</code>来连接进程。在Linux下通过管道连接的进程可以同时运行，并且随着数据流在它们之间的传递可以自动地进行协调。</p>
+<p>​	使用sort命令对ps命令的输出进行排序。</p>
+<p>​	如果不使用管道，步骤如下：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ps &gt; psout.txt</span><br><span class="line">sort psout.txt &gt; pssort.out</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	如果使用管道，如下：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps | sort &gt; pssort.out</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	如果想在屏幕上分页显示输出结果，你可以再连接第三个进程more</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps | sort | more</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	允许连接的进程数目是没有限制的，使用以下命令可以查看除了Shell程序外运行的所有进程名字：</p>
+<p>ps -xo comm | sort | uniq | grep -v sh | more</p>
+<p>​	<strong>注意：</strong>如果你有一系列的命令需要执行，相应的输出文件是在这一组命令被创建的同时立刻被创建或写入的，所以一定不要在命令流中重复使用相同的文件名。</p>
+<h3 id="3-shell的使用方式"><a href="#3-shell的使用方式" class="headerlink" title="3.shell的使用方式"></a>3.shell的使用方式</h3><p>​	可以输入一系列命令让shell交互地执行它们，也可以把这些命令保存到一个文件中，然后将该文件作为一个程序来调用。</p>
+<h4 id="3-1交互程序"><a href="#3-1交互程序" class="headerlink" title="3.1交互程序"></a>3.1交互程序</h4><p>​	命令行上直接输入shell脚本</p>
+<p>​	shell提供了通配符扩展，可以用通配符*来匹配一个字符串。[set]允许匹配方括号中任何一个单个字符，[^set]对方括号中的内容取反，即匹配任何没有出现在给出的字符集中的字符，set表示字符集合。扩展的花括号{}（只能用在部分shell中，其中包括bash）允许你将任意的字符串组放在一个集合中，以供shell进行扩展。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls my_{finger,toe}s</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这个命令将列出文件my_fingers和my_toes</p>
+<h4 id="3-2创建脚本"><a href="#3-2创建脚本" class="headerlink" title="3.2创建脚本"></a>3.2创建脚本</h4><p>​	shell程序可以允许将几个现有的命令结合在一起，以构成一个新的功能强大的命令。如果将这些命令保存在一个文件中，这就是shell脚本，这样就可以在需要的时候随时执行它们。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">first</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">This file looks through all the files <span class="keyword">in</span> the current</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">directory <span class="keyword">for</span> the string POSIX, and the prints the names of</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">those files to the standard output.</span></span><br><span class="line"></span><br><span class="line">for file in *</span><br><span class="line">do</span><br><span class="line">  if grep -q POSIX $file</span><br><span class="line">  then</span><br><span class="line">    echo $file</span><br><span class="line">  fi  </span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">exit 0 </span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	创建一个文本文件<code>first</code>，程序注释以#符号开始，一直持续到该行的结束。第一行的<code>#!/bin/sh</code>是特殊的注释，<code>#!</code>字符告诉系统同一行上紧跟在它后面的那个参数是用来执行本文件的程序。</p>
+<p>​	脚本程序本质上被看作是shell的标准输入，所以它可以包含任何能够通过你的PATH环境变量引用到的Linux命令。</p>
+<p>​	exit命令的作用是确保脚本程序能够返回一个有意义的退出码，在shell程序设计里，0表示成功。</p>
+<h4 id="3-3执行脚本"><a href="#3-3执行脚本" class="headerlink" title="3.3执行脚本"></a>3.3执行脚本</h4><p>​	两种方法运行脚本文件</p>
+<p>​	第一种：调用shell，把脚本文件名当成一个参数</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/sh first</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	第二种：使用<code>chmod</code>命令来改变换个文件的模式，使得这个文件可以被所有用户执行</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x first</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	然后执行</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./first</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	可以将脚本文件移动到特定的文件目录中，然后将该目录添加到PATH变量中，这样就可以直接执行脚本</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">first</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4-Shell语法"><a href="#4-Shell语法" class="headerlink" title="4.Shell语法"></a>4.Shell语法</h3><h4 id="4-1变量"><a href="#4-1变量" class="headerlink" title="4.1变量"></a>4.1变量</h4><p>​	Shell中变量使用之前通常不需要事先做出声明，通过使用他们来进行创建。默认情况所有的变量都被看做字符串，在Shell中可以通过在变量名前加一个$符号来访问它的内容，当为变量赋值时，你只需要使用变量名，该变量会根据需要被自动创建。<strong>注意，如果字符串里包含空格，就必须用引号把它们括起来。此外，等号两边不能有空格。</strong></p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">salutation=Hello</span><br><span class="line">echo $salutation</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	read命令将用户的输入赋值给一个变量。他会等待用户输入数据。</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">read salutation</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	(1)引号的作用</p>
+<p>​	脚本文件中的参数以空白字符间隔，如果要在一个参数中包含多个空白字符，就必须给参数加上引号。</p>
+<p>​	$变量表达式放在双引号中，程序执行到这一行时就会把变量替换为它的值；如果放在单引号中，就不会发生替换现象；在$字符前加上一个\字符可以取消它的特殊含义。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">myvar="Hi there"</span><br><span class="line"></span><br><span class="line">echo $myvar</span><br><span class="line">echo "$myvar"</span><br><span class="line">echo '$myvar'</span><br><span class="line">echo \$myvar</span><br><span class="line"></span><br><span class="line">echo Enter some text</span><br><span class="line">read myvar</span><br><span class="line"></span><br><span class="line">echo '$myvar' now equals $myvar</span><br><span class="line">exit 0</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421211159233.png" alt="image-20240421211159233"></p>
+<p>​	解析：在变量名前加一个$符号就能看见变量的内容。使用双引号时如果变量名前有$符号，也会看到变量的内容。使用单引号和反斜线就看不到变量内容。</p>
+<p>​	(2)环境变量</p>
+<p>​	当一个shell脚本程序开始执行时，一些变量会根据环境设置中的值进行初始化。这些变量通常用大写字符做名字，以便把他们和用户在脚本程序里定义的变量区分开来。可以理解就是所有的脚本天生就有这些变量，这些变量在脚本程序执行时自动初始化的。</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421213011938.png" alt="环境变量"></p>
+<p>​	(3)<a href="#%E4%BD%8D%E7%BD%AE%E5%8F%82%E6%95%B0"><span id="参数变量">参数变量</span></a></p>
+<p>​	如果脚本程序在调用时带有参数，一些额外的变量就会被创建。即使没有传递任何参</p>
+<p>数，环境变量$#也依然存在，只不过它的值是0罢了。</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421213212279.png" alt="参数变量"></p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421213743945.png" alt="image-20240421213743945"></p>
+<p>​	除了使用echo命令查看变量的内容外，你还可以使用read命令来读取变量。</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421215248918.png" alt="image-20240421215248918"></p>
+<h4 id="4-2条件"><a href="#4-2条件" class="headerlink" title="4.2条件"></a>4.2条件</h4><p>​	Shell的布尔判断命令<code>[</code>或<code>test</code>。</p>
+<p>​	简单介绍<code>test</code>或<code>[</code>用法：检查一个文件是否存在</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if test -f fred.c</span><br><span class="line">then</span><br><span class="line">...</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	或</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if [ -f fred.c ]</span><br><span class="line">then</span><br><span class="line">...</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	test命令可以使用的条件类型可以归为3类：字符串比较、算术比较和与文件有关的条件测试。</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421220942488.png" alt="image-20240421220942488"></p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421221043037.png" alt="image-20240421221043037"></p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421221051915.png" alt="image-20240421221051915"></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">if [ -f /bin/bash ]</span><br><span class="line">then</span><br><span class="line">  echo "file /bin/bash exists"</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ -d /bin/bash ]</span><br><span class="line">then</span><br><span class="line">  echo "/bin/bash is a directory"</span><br><span class="line">else</span><br><span class="line">  echo "/bin/bash is NOT a directory"</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421221754120.png" alt="image-20240421221754120"></p>
+<h4 id="4-3控制结构"><a href="#4-3控制结构" class="headerlink" title="4.3控制结构"></a>4.3控制结构</h4><p>​	<strong>(1)<code>if</code>语句</strong></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if condition</span><br><span class="line">then</span><br><span class="line">  statements</span><br><span class="line">else</span><br><span class="line">  statements</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	实验</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">echo "Is it morning? Please answer yes or no"</span><br><span class="line">read timeofday</span><br><span class="line"></span><br><span class="line">if [ $timeofday = "yes" ]; then</span><br><span class="line">  echo "Good morning"</span><br><span class="line">else</span><br><span class="line">  echo "Good afternoon"</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">exit 0</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421222553276.png" alt="image-20240421222553276"></p>
+<p>​	<strong>(2)使用elif结构进一步检查</strong></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">echo "Is it morning? Please answer yes or no"</span><br><span class="line">read timeofday</span><br><span class="line"></span><br><span class="line">if [ $timeofday = "yes" ]</span><br><span class="line">then</span><br><span class="line">  echo "Good morning"</span><br><span class="line"></span><br><span class="line">elif [ $timeofday = "no" ]; then</span><br><span class="line">  echo "Good afternoon"</span><br><span class="line">else</span><br><span class="line">  echo "Sorry, $timeofday not recognized. Enter yes or no"</span><br><span class="line">  exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">exit 0  </span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421223713293.png" alt="image-20240421223713293"></p>
+<p>​	这里存在一个漏洞，如果用户什么都不输入，会导致报错，因为空输入会导致语句<code>if [ $timeofday = "yes"]</code>变成<code>if [ = "yes"]</code>，这不是一个合法的输入，为了避免这种情况，需要在变量timeofday上加上双引号，即变成<code>if [ "$timeofday " = "yes"]</code>，这样空输入就变成<code>if ["" = "yes"]</code>，这样空字符也是合法输入。</p>
+<p>​	<strong>(3)for语句</strong></p>
+<p>​	使用for循环结构处理一组值。将一组values值依次赋给变量variable</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for variable in values</span><br><span class="line">do</span><br><span class="line">  statements</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">for foo in bar fud 43</span><br><span class="line">do</span><br><span class="line">  echo $foo</span><br><span class="line">done</span><br><span class="line">exit 0      </span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240421230708364.png" alt="image-20240421230708364"></p>
+<p>​	<strong>(4)while语句</strong></p>
+<p>​	使用while循环处理事先并不知道循环要执行的次数的情况。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">while condition do</span><br><span class="line">  statement</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	测试</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">echo "Enter password"</span><br><span class="line">read trythis</span><br><span class="line"></span><br><span class="line">while [ "$trythis" != "secret" ]; do</span><br><span class="line">  echo "Sorry, try again"</span><br><span class="line">  read trythis</span><br><span class="line">done</span><br><span class="line">exit 0    </span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240422160527340.png" alt="image-20240422160527340"></p>
+<p>​	<strong>(5)until语句</strong></p>
+<p>​	循环将反复执行直到条件为真，而不是在条件为真时反复执行。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">until condition</span><br><span class="line">do</span><br><span class="line">  statement</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	示例，设置一个警报，当某个特定的用户登录时，该警报就会启动，通过命令行将用户名传递给脚本程序。如果用户已经登录，那么循环就不需要执行。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">until who | grep "$1" &gt; /dev/null</span><br><span class="line">do</span><br><span class="line">  sleep 60</span><br><span class="line">done</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">now ring the bell and announce the expected user.</span></span><br><span class="line"></span><br><span class="line">echo -e 'notice!!!'</span><br><span class="line">echo "**** $1 has just logged in ****"</span><br><span class="line"></span><br><span class="line">exit 0  </span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240422161759510.png" alt="image-20240422161759510"></p>
+<p>​	<strong>(6)case语句</strong></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">case variable in</span><br><span class="line">  pattern [ | pattern] ...) statements;;</span><br><span class="line">  pattern [ | pattern] ...) statements;;</span><br><span class="line">  ...</span><br><span class="line">esac</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	示例1：用户输入</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">echo "Is it morning? Please answer yes or no"</span><br><span class="line">read timeofday</span><br><span class="line"></span><br><span class="line">case "$timeofday" in</span><br><span class="line">    yes) echo "Good Morning";;</span><br><span class="line">    no ) echo "Good Afternoon";;</span><br><span class="line">    y  ) echo "Good Morning";;</span><br><span class="line">    n  ) echo "Good Afternoon";;</span><br><span class="line">    *  ) echo "Sorry, answer not recognized";;</span><br><span class="line">esac</span><br><span class="line"></span><br><span class="line">exit 0   </span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240422164017376.png" alt="image-20240422164017376"></p>
+<p>使用一个单独的*表示匹配任何可能的字符串，所以总是在其他匹配字符串之后再加上一个*以确保如果没有字符串得到匹配</p>
+<p>​	示例2：合并匹配模式</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">echo "Is it morning? Please answer yes or no" </span><br><span class="line">read timeofday</span><br><span class="line"></span><br><span class="line">case "$timeofday" in</span><br><span class="line">    yes | y | Yes | YES )      echo "Good Morning";;</span><br><span class="line">    n* | N* )                  echo "Good Afternoon";;</span><br><span class="line">    * )                        echo "Sorry, answer not recognized";;</span><br><span class="line">esac</span><br><span class="line"></span><br><span class="line">exit 0 </span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240422170414893.png" alt="image-20240422170414893"></p>
+<p>​	示例3：执行多条语句</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">echo "Is it morning? Please answer yes or no"</span><br><span class="line">read timeofday</span><br><span class="line"></span><br><span class="line">case "$timeofday" in</span><br><span class="line">    yes | y | Yes | YES )</span><br><span class="line">           echo "Good Morning"</span><br><span class="line">           echo "Up bright and early this moring"</span><br><span class="line">           ;;  </span><br><span class="line">    [nN]*)</span><br><span class="line">           echo "Good Afternoon"</span><br><span class="line">           ;;  </span><br><span class="line">    *)  </span><br><span class="line">           echo "Sorry, answer not recognized"</span><br><span class="line">           echo "Please answer yes or no"</span><br><span class="line">           exit 1</span><br><span class="line">           ;;  </span><br><span class="line">esac</span><br><span class="line"></span><br><span class="line">exit 0     </span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240422171105211.png" alt="image-20240422171105211"></p>
+<p>​	必须很小心地把最精确的匹配放在最开始，而把最一般化的匹配放在最后。这样做很重要，因为case将执行它找到的第一个匹配而不是最佳匹配。如果你把*)放在开头，那不管用户输入的是什么，都会匹配这个模式。</p>
+<p>​	<strong>(7)命令列表</strong></p>
+<p>​	想要将几条命令连接成一个序列。可以使用特殊结构专门用于处理命令列表，它们就是AND列表和OR列表。</p>
+<p>​	<strong>AND列表：</strong>只有在前面所有的命令都执行成功的情况下才执行后一条命令。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">statement1 &amp;&amp; statement2 &amp;&amp; statement3 &amp;&amp; ...</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	示例：执行touch file_one命令（检查文件是否存在，如果不存在就创建它）并删除file_two文件。然后用AND列表检查每个文件是否存在并通过echo命令给出相应的指示。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">touch file_one</span><br><span class="line">rm -f file_two</span><br><span class="line"></span><br><span class="line">if [ -f file_one] &amp;&amp; echo "hello" &amp;&amp; [ -f file_two ] &amp;&amp; echo " there"</span><br><span class="line">then</span><br><span class="line">    echo "in if"</span><br><span class="line">else</span><br><span class="line">    echo "in else"</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">exit 0  </span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240422173447572.png" alt="image-20240422173447572"></p>
+<p>​	<strong>OR列表：</strong>OR列表结构允许持续执行一系列命令直到有一条命令成功为止，其后的命令将不再被执行。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">statement1 || statement2 || statement3 || ...</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	示例：上一个示例的修改</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">rm -f file_one</span><br><span class="line"></span><br><span class="line">if [ -f file_one ] || echo "hello" || echo " there"</span><br><span class="line">then</span><br><span class="line">    echo "in if"</span><br><span class="line">else</span><br><span class="line">    echo "in else"</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">exit 0                                                                 </span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240422174327654.png" alt="image-20240422174327654"></p>
+<p>​	<strong>(8)语句块</strong></p>
+<p>​	如果你想在某些只允许使用单个语句的地方（比如在AND或OR列表中）使用多条语句，你可以把它们括在花括号{}中来构造一个语句块。</p>
+<h4 id="4-4函数"><a href="#4-4函数" class="headerlink" title="4.4函数"></a>4.4函数</h4><p>​	函数的执行速度比将大型脚本程序分解成许多小脚本程序来执行快得多，shell函数的</p>
+<p>定义和C语言函数差不多</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function_name () {</span><br><span class="line">	statements</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	函数的调用写出函数名字即可</p>
+<p>​	简单示例</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line">foo() {</span><br><span class="line">    echo <span class="string">"Function foo is executing"</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">echo <span class="string">"script starting"</span></span><br><span class="line">foo</span><br><span class="line">echo <span class="string">"script ended"</span></span><br><span class="line"></span><br><span class="line">exit 0      </span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240427155049223.png" alt="image-20240427155049223"></p>
+<p>​	所有函数在调用前必须定义，shell中不存在前向声明。</p>
+<p>​	<strong>函数返回值</strong></p>
+<p>​	以下函数演示了函数的参数是如何传递的，以及函数如何返回一个true或false值</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">yes_or_no() {</span><br><span class="line">    echo "Is your name $* ?"</span><br><span class="line">    while true</span><br><span class="line">    do  </span><br><span class="line">      echo -n "Enter yes or no: "</span><br><span class="line">      read x</span><br><span class="line">      case "$x" in</span><br><span class="line">        y | yes ) return 0;; </span><br><span class="line">        n | no  ) return 1;; </span><br><span class="line">        * )       echo "Answer yes or no"</span><br><span class="line">      esac</span><br><span class="line">    done</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">echo "Original parameters are $*"</span><br><span class="line"></span><br><span class="line">if yes_or_no "$1"</span><br><span class="line">then</span><br><span class="line">    echo "Hi $1, nice name"</span><br><span class="line">else</span><br><span class="line">    echo "Never mind"</span><br><span class="line">fi</span><br><span class="line">exit 0 </span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240428122852881.png" alt="image-20240428122852881"></p>
+<p>​	当一个函数被调用时，脚本程序的<a id="位置参数"></a><a href="#%E5%8F%82%E6%95%B0%E5%8F%98%E9%87%8F">位置参数</a>（$*、$@、$#、$1、$2等）会被替换为函数的参数。这也是读取传递给函数的参数的办法。当函数执行完毕后，这些参数会恢复为它们先前的值。</p>
+<p>​	上面的传入函数<code>yes_or_no</code>中的参数为<code>$1</code>，也就是传入脚本程序第一个参数，在<code>yes_or_no</code>函数中使用<code>$*</code>访问的是传入函数的全部参数(这里只有<code>$1</code>)，而不是传入脚本的全部参数<code>$1,$2,$3...</code></p>
+<h4 id="4-4命令"><a href="#4-4命令" class="headerlink" title="4.4命令"></a>4.4命令</h4><p>​	外部命令：可以在命令提示符中执行的“普通”命令</p>
+<p>​	内部命令：在shell内部实现的，它们不能作为外部程序被调用</p>
+<p>​	常用主要命令（不区分内部外部）</p>
+<p>​	(1) <code>break</code>命令</p>
+<p>​	跳出for、while或until循环，后面可以跟数字来跳出循环层数，默认是1层。</p>
+<p>​	(2) <code>:</code>命令</p>
+<p>​	命令是一个空命令。它偶尔会被用于简化条件逻辑，相当于true的一个别名。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">while:   #相当于while true</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	(3) <code>continue</code>命令</p>
+<p>​	使for、while或until循环跳到下一次循环继续执行，循环变量取循环列表中的下一个值。</p>
+<p>​	(4) <code>.</code>命令</p>
+<p>​	通常，当一个脚本执行一条外部命令或脚本程序时，它会创建一个新的环境（一个子shell），命令将在这个新环境中执行，在命令执行完毕后，这个环境被丢弃，留下退出码返回给父shell。但外部的source命令和点命令（这两个命令差不多是同义词）在执行脚本程序中列出的命令时，使用的是调用该脚本程序的同一个shell。</p>
+<p>​	(5) <strong><code>echo</code>命令</strong></p>
+<p>​	使用echo命令来输出结尾带有换行符的字符串。可以增加附加信息去掉换行符。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo -n "string to output"</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo -e "string to output\c"</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	第一种是去掉默认换行符，第二种是去掉反斜杠的转义字符(如\c代表去掉换行符，\t代表制表符，\n代表回车)</p>
+<p>​	(6) <code>eval</code>命令</p>
+<p>​	eval命令允许对参数进行求值。</p>
+<p>​	(7) <code>exec</code>命令</p>
+<p>​	典型用法是将当前shell替换为一个不同的程序。</p>
+<p>​	(8) <strong><code>exit n</code>命令</strong></p>
+<p>​	exit命令使脚本程序以退出码n结束运行。</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240428130650350.png" alt="image-20240428130650350"></p>
+<p>​	(9) <code>export</code>命令</p>
+<p>​	export命令将作为它参数的变量导出到子shell中，并使之在子shell中有效。在默认情况下，在一个shell中被创建的变量在这个shell调用的下级（子）shell中是不可用的。</p>
+<p>​	(10) <code>expr</code>命令</p>
+<p>​	expr命令将它的参数当作一个表达式来求值。惯用法：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x=$(expr $x + 1)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	(11) <code>printf</code>命令</p>
+<p>​	代替echo命令，以产生格式化的输出</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">printf "format string" parameter1 parameter2 ...</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	和C/C++很相似，有自己的限制，不支持浮点数，格式字符串中除了%和\之外的所有字符都将按原样输出。</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240428131716072.png" alt="image-20240428131716072"></p>
+<p>​	(12) <code>return</code>命令</p>
+<p>​	return命令的作用是使函数返回。</p>
+<p>​	(13) <code>set</code>命令</p>
+<p>​	set命令的作用是为shell设置参数变量。许多命令的输出结果是以空格分隔的值，如果需要使用输出结果中的某个域，这个命令就非常有用。</p>
+<p>​	(14) <code>shift</code>命令</p>
+<p>​	shift命令把所有参数变量左移一个位置，使$2变成$1，$3变成$2，以此类推。原来$1的值将被丢弃，而$0仍将保持不变。如</p>
+<p>​	(15) <code>trap</code>命令</p>
+<p>​	trap命令用于指定在接收到信号后将要釆取的行动.</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trap command signal</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240428132646222.png" alt="image-20240428132646222"></p>
+<p>​	(16) <code>unset</code>命令</p>
+<p>​	unset命令的作用是从环境中删除变量或函数。</p>
+<p>​	(17) 搜索命令</p>
+<p>​	<strong><code>find</code>命令</strong>	</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find [path] [options] [tests] [actions]</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​	options:</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240428133717907.png" alt="image-20240428133717907"></p>
+<p>​	tests:</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240428133737158.png" alt="image-20240428133737158"></p>
+<p>以下操作符和tests合用</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240428133816810.png" alt="image-20240428133816810"></p>
+<p>​	actions：</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240428134044963.png" alt="image-20240428134044963"></p>
+<p>​	<strong><code>grep</code>命令</strong></p>
+<p>​	是通用正则表达式解析器（General Regular Expression Parser，简写为grep）。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep [options] PATTERN [FILES]</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240428142211744.png" alt="image-20240428142211744"></p>
+<p>​	正则表达式，在匹配模式<code>PATTERN</code>那里使用</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240428143326411.png" alt="image-20240428143326411"></p>
+<p>​	想将上述字符用作普通字符，就需要在它们前面加上\字符。</p>
+<p>​	方括号中有特殊匹配模式：</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240428143358928.png" alt="image-20240428143358928"></p>
+<p>​	如果指定了用于扩展匹配的-E选项，那些用于控制匹配完成的其他字符可能会遵循正则表达式的规则</p>
+<p><img src="/2024/05/11/shell-cheng-xu-she-ji/image-20240428143534752.png" alt="image-20240428143534752"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://nofishisme.github.io">渔樵@~</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://nofishisme.github.io/2024/05/11/shell-cheng-xu-she-ji/">https://nofishisme.github.io/2024/05/11/shell-cheng-xu-she-ji/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://nofishisme.github.io" target="_blank">渔樵のBlog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BC%96%E7%A8%8B/">编程</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/117950632_p10_master1200.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/05/11/ji-yu-wen-ben-de-ping-mu-curses-han-shu-ku/" title="基于文本的屏幕——curses函数库"><img class="cover" src="/img/cover/117950632_p2_master1200.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">基于文本的屏幕——curses函数库</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/05/11/ji-yu-wen-ben-de-ping-mu-curses-han-shu-ku/" title="基于文本的屏幕——curses函数库"><img class="cover" src="/img/cover/117950632_p2_master1200.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-11</div><div class="title">基于文本的屏幕——curses函数库</div></div></a></div><div><a href="/2024/05/11/xian-cheng/" title="Linux线程以及相关接口"><img class="cover" src="/img/cover/117950632_p11_master1200.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-11</div><div class="title">Linux线程以及相关接口</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/20210607212402_82a8d.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">渔樵@~</div><div class="author-info__description">桥下的鱼，看着桥上的人......</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nofishisme/nofishisme.github.io"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/nofishisme" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:wuyunofish@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">渔樵的个人博客，记录学习之旅。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Shell%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1"><span class="toc-text">Shell程序设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AFShell%E7%BC%96%E7%A8%8B"><span class="toc-text">1.什么是Shell编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%AE%A1%E9%81%93%E5%92%8C%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-text">2.管道和重定向</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1%E9%87%8D%E5%AE%9A%E5%90%91%E8%BE%93%E5%87%BA"><span class="toc-text">2.1重定向输出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2%E9%87%8D%E5%AE%9A%E5%90%91%E8%BE%93%E5%85%A5"><span class="toc-text">2.2重定向输入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3%E7%AE%A1%E9%81%93"><span class="toc-text">2.3管道</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-shell%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">3.shell的使用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1%E4%BA%A4%E4%BA%92%E7%A8%8B%E5%BA%8F"><span class="toc-text">3.1交互程序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2%E5%88%9B%E5%BB%BA%E8%84%9A%E6%9C%AC"><span class="toc-text">3.2创建脚本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC"><span class="toc-text">3.3执行脚本</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Shell%E8%AF%AD%E6%B3%95"><span class="toc-text">4.Shell语法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1%E5%8F%98%E9%87%8F"><span class="toc-text">4.1变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2%E6%9D%A1%E4%BB%B6"><span class="toc-text">4.2条件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84"><span class="toc-text">4.3控制结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4%E5%87%BD%E6%95%B0"><span class="toc-text">4.4函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4%E5%91%BD%E4%BB%A4"><span class="toc-text">4.4命令</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/05/11/shell-cheng-xu-she-ji/" title="Shell程序设计"><img src="/img/cover/117950632_p10_master1200.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Shell程序设计"/></a><div class="content"><a class="title" href="/2024/05/11/shell-cheng-xu-she-ji/" title="Shell程序设计">Shell程序设计</a><time datetime="2024-05-11T12:32:28.000Z" title="发表于 2024-05-11 20:32:28">2024-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/05/11/ji-yu-wen-ben-de-ping-mu-curses-han-shu-ku/" title="基于文本的屏幕——curses函数库"><img src="/img/cover/117950632_p2_master1200.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于文本的屏幕——curses函数库"/></a><div class="content"><a class="title" href="/2024/05/11/ji-yu-wen-ben-de-ping-mu-curses-han-shu-ku/" title="基于文本的屏幕——curses函数库">基于文本的屏幕——curses函数库</a><time datetime="2024-05-11T12:32:28.000Z" title="发表于 2024-05-11 20:32:28">2024-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/05/11/xian-cheng/" title="Linux线程以及相关接口"><img src="/img/cover/117950632_p11_master1200.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Linux线程以及相关接口"/></a><div class="content"><a class="title" href="/2024/05/11/xian-cheng/" title="Linux线程以及相关接口">Linux线程以及相关接口</a><time datetime="2024-05-11T12:31:37.000Z" title="发表于 2024-05-11 20:31:37">2024-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/05/09/ubuntu-zhong-zhao-bu-dao-tou-wen-jian-term-h-he-curses-h-de-jie-jue-fang-fa/" title="ubuntu中找不到头文件term.h和curses.h的解决方法"><img src="/img/cover/117950632_p3_master1200.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ubuntu中找不到头文件term.h和curses.h的解决方法"/></a><div class="content"><a class="title" href="/2024/05/09/ubuntu-zhong-zhao-bu-dao-tou-wen-jian-term-h-he-curses-h-de-jie-jue-fang-fa/" title="ubuntu中找不到头文件term.h和curses.h的解决方法">ubuntu中找不到头文件term.h和curses.h的解决方法</a><time datetime="2024-05-09T06:59:55.000Z" title="发表于 2024-05-09 14:59:55">2024-05-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/25/makefile-wen-jian-de-shi-yong/" title="Makefile文件的使用"><img src="/img/cover/117950632_p11_master1200.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Makefile文件的使用"/></a><div class="content"><a class="title" href="/2024/04/25/makefile-wen-jian-de-shi-yong/" title="Makefile文件的使用">Makefile文件的使用</a><time datetime="2024-04-25T01:58:04.000Z" title="发表于 2024-04-25 09:58:04">2024-04-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2024 By 渔樵@~</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">你好！欢迎来到我的<a href="https://nofishisme.github.io/">博客</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-show-text.min.js" data-mobile="false" data-text="渔樵@~" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
